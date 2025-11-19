@@ -21,10 +21,8 @@ public class Meta {
     @Column(nullable = false)
     private String nome;
 
-    // --- CORREÇÃO AQUI ---
-    // Adicionamos columnDefinition = "smallint" para bater com o banco
-    @Column(nullable = false, columnDefinition = "smallint")
-    private Integer dificuldade; 
+    @Column(nullable = false)
+    private Short dificuldade; 
 
     @Column(length = 50)
     private String frequencia;
