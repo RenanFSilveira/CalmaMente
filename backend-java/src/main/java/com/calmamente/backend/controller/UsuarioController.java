@@ -33,6 +33,9 @@ public class UsuarioController {
     // PUT /usuarios/{id} -> Atualiza dados do perfil (Cadastro complementar)
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizar(@PathVariable UUID id, @RequestBody Usuario usuario) {
+        System.out.println("--- RECEBENDO PUT /usuarios/" + id + " ---");
+        System.out.println("Payload recebido: " + usuario);
+        
         Usuario atualizado = service.atualizarPerfil(id, usuario);
         return ResponseEntity.ok(atualizado);
     }

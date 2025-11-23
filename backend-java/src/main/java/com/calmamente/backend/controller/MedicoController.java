@@ -16,6 +16,9 @@ public class MedicoController {
 
     @PostMapping("/completar-cadastro")
     public ResponseEntity<Medico> completarCadastro(@RequestBody CadastroMedicoDTO dto) {
+        System.out.println("--- RECEBENDO POST /medicos/completar-cadastro ---");
+        System.out.println("Payload recebido: " + dto);
+
         Medico novoMedico = service.cadastrarMedico(dto);
         return ResponseEntity.ok(novoMedico);
     }

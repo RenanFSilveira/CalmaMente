@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class MedicoService {
 
@@ -21,9 +23,8 @@ public class MedicoService {
 
     @Transactional // Garante que salva tudo ou nada
     public Medico cadastrarMedico(CadastroMedicoDTO dados) {
-        // 1. Busca o Usuário que o Trigger criou (ou que veio do Front)
-        Usuario usuario = usuarioRepository.findById(dados.getUsuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário base não encontrado. Crie o Auth primeiro."));
+        // 1. Busca o Usuário que o Trigger criou (ou que veio do Front) com Retry
+        Usuario usuario = buscarUsuarioComRetry(dados.getUsuarioId());
 
         // 2. Atualiza os dados comuns na tabela Usuario
         usuario.setNome(dados.getNome());
@@ -39,5 +40,29 @@ public class MedicoService {
         medico.setEspecialidade(dados.getEspecialidade());
 
         return medicoRepository.save(medico);
+    }
+
+    private Usuario buscarUsuarioComRetry(UUID id) {
+        int tentativas = 0;
+        int maxTentativas = 5;
+        long tempoEspera = 1000; // 1 segundo
+
+        while (tentativas < maxTentativas) {
+            java.util.Optional<Usuario> usuario = usuarioRepository.findById(id);
+            if (usuario.isPresent()) {
+                return usuario.get();
+            }
+
+            try {
+                System.out.println("Usuário (Médico) " + id + " não encontrado. Tentativa " + (tentativas + 1) + "/" + maxTentativas + ". Aguardando...");
+                Thread.sleep(tempoEspera);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Erro ao aguardar criação do usuário.", e);
+            }
+            tentativas++;
+        }
+
+        throw new RuntimeException("Usuário base não encontrado após " + maxTentativas + " tentativas. Crie o Auth primeiro.");
     }
 }
