@@ -24,6 +24,9 @@ public class Meta {
     @Column(nullable = false)
     private Short dificuldade; 
 
+@Column(length = 50)
+    private String categoria;
+
     @Column(length = 50)
     private String frequencia;
 

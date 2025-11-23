@@ -65,4 +65,24 @@ public class MedicoService {
 
         throw new RuntimeException("Usuário base não encontrado após " + maxTentativas + " tentativas. Crie o Auth primeiro.");
     }
+
+    public java.util.List<Medico> buscarMedicos(String nome, String especialidade) {
+        // 1. Se tem Nome E Especialidade
+        if (nome != null && !nome.isBlank() && especialidade != null && !especialidade.isBlank()) {
+            return medicoRepository.findByUsuario_NomeContainingIgnoreCaseAndEspecialidadeContainingIgnoreCase(nome, especialidade);
+        }
+        
+        // 2. Se tem só Nome (Barra de busca)
+        if (nome != null && !nome.isBlank()) {
+            return medicoRepository.findByUsuario_NomeContainingIgnoreCase(nome);
+        }
+
+        // 3. Se tem só Especialidade (Dropdown de categorias)
+        if (especialidade != null && !especialidade.isBlank()) {
+            return medicoRepository.findByEspecialidadeContainingIgnoreCase(especialidade);
+        }
+
+        // 4. Se não tem nada, traz todos (Cuidado: em produção usamos paginação)
+        return medicoRepository.findAll();
+    }
 }

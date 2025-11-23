@@ -29,4 +29,8 @@ public class ConteudoService {
     public List<Conteudo> listarPorCategoria(String categoria) {
         return repository.findByCategoria(categoria);
     }
+
+    public List<Conteudo> buscarPorTitulo(String titulo) {
+        return repository.findByTituloContainingIgnoreCase(titulo);
+    }
 }

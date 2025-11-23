@@ -22,4 +22,12 @@ public class MedicoController {
         Medico novoMedico = service.cadastrarMedico(dto);
         return ResponseEntity.ok(novoMedico);
     }
+
+    @GetMapping
+    public ResponseEntity<java.util.List<Medico>> listar(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String especialidade) {
+        
+        return ResponseEntity.ok(service.buscarMedicos(nome, especialidade));
+    }
 }

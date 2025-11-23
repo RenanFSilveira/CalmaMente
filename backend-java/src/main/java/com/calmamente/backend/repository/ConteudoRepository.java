@@ -15,4 +15,6 @@ public interface ConteudoRepository extends JpaRepository<Conteudo, UUID> {
     
     // Para filtrar por categoria (ex: trazer tudo sobre "Sono")
     List<Conteudo> findByCategoria(String categoria);
+
+    List<Conteudo> findByTituloContainingIgnoreCase(String titulo);
 }
