@@ -21,20 +21,31 @@ public class MedicoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Transactional // Garante que salva tudo ou nada
+    @Transactional 
     public Medico cadastrarMedico(CadastroMedicoDTO dados) {
-        // 1. Busca o Usuário que o Trigger criou (ou que veio do Front) com Retry
+        // 1. Busca o Usuário com Retry
         Usuario usuario = buscarUsuarioComRetry(dados.getUsuarioId());
 
-        // 2. Atualiza os dados comuns na tabela Usuario
+        // 2. Atualiza os dados na tabela Usuario
         usuario.setNome(dados.getNome());
         usuario.setTelefone(dados.getTelefone());
-        usuario.setTipo(TipoUsuario.profissional); // Força o tipo
+        
+        // --- NOVOS CAMPOS SENDO SALVOS ---
+        if (dados.getCpf() != null) usuario.setCpf(dados.getCpf());
+        if (dados.getGenero() != null) usuario.setGenero(dados.getGenero());
+        if (dados.getDataNascimento() != null) usuario.setDataNascimento(dados.getDataNascimento());
+        // ---------------------------------
+
+        usuario.setTipo(TipoUsuario.profissional); 
         usuarioRepository.save(usuario);
 
-        // 3. Cria a entrada na tabela Medico vinculada
+        // 3. Cria a entrada na tabela Medico
         Medico medico = new Medico();
-        medico.setUsuario(usuario); // O @MapsId vai cuidar de copiar o ID
+        medico.setUsuario(usuario);
+        
+        // Garante o ID igual (Correção importante)
+        medico.setId(usuario.getId()); 
+
         medico.setCrm(dados.getCrm());
         medico.setCnpj(dados.getCnpj());
         medico.setEspecialidade(dados.getEspecialidade());
@@ -45,7 +56,7 @@ public class MedicoService {
     private Usuario buscarUsuarioComRetry(UUID id) {
         int tentativas = 0;
         int maxTentativas = 5;
-        long tempoEspera = 1000; // 1 segundo
+        long tempoEspera = 1000; 
 
         while (tentativas < maxTentativas) {
             java.util.Optional<Usuario> usuario = usuarioRepository.findById(id);
@@ -67,22 +78,15 @@ public class MedicoService {
     }
 
     public java.util.List<Medico> buscarMedicos(String nome, String especialidade) {
-        // 1. Se tem Nome E Especialidade
         if (nome != null && !nome.isBlank() && especialidade != null && !especialidade.isBlank()) {
             return medicoRepository.findByUsuario_NomeContainingIgnoreCaseAndEspecialidadeContainingIgnoreCase(nome, especialidade);
         }
-        
-        // 2. Se tem só Nome (Barra de busca)
         if (nome != null && !nome.isBlank()) {
             return medicoRepository.findByUsuario_NomeContainingIgnoreCase(nome);
         }
-
-        // 3. Se tem só Especialidade (Dropdown de categorias)
         if (especialidade != null && !especialidade.isBlank()) {
             return medicoRepository.findByEspecialidadeContainingIgnoreCase(especialidade);
         }
-
-        // 4. Se não tem nada, traz todos (Cuidado: em produção usamos paginação)
         return medicoRepository.findAll();
     }
 }

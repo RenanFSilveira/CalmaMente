@@ -27,9 +27,15 @@ public class AgendamentoController {
     @GetMapping("/ocupados/{medicoId}")
     public ResponseEntity<List<Agendamento>> listarHorariosOcupados(
             @PathVariable UUID medicoId,
-            @RequestParam LocalDateTime inicio, // Formato ISO: 2022-01-01T00:00:00
-            @RequestParam LocalDateTime fim) {  // Formato ISO: 2022-01-31T23:59:59
+            @RequestParam LocalDateTime inicio, 
+            @RequestParam LocalDateTime fim) { 
         
         return ResponseEntity.ok(service.listarOcupados(medicoId, inicio, fim));
+    }
+
+    // 👇 NOVO ENDPOINT ADICIONADO
+    @GetMapping("/meus/{usuarioId}")
+    public ResponseEntity<List<Agendamento>> listarMinhas(@PathVariable UUID usuarioId) {
+        return ResponseEntity.ok(service.listarMinhasConsultas(usuarioId));
     }
 }

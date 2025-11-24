@@ -25,7 +25,7 @@ public class UsuarioService {
         if(dadosAtualizados.getDataNascimento() != null) usuarioExistente.setDataNascimento(dadosAtualizados.getDataNascimento());
         if(dadosAtualizados.getFotoPerfil() != null) usuarioExistente.setFotoPerfil(dadosAtualizados.getFotoPerfil());
         if(dadosAtualizados.getGenero() != null) usuarioExistente.setGenero(dadosAtualizados.getGenero());
-        
+
         // O Tipo e Email geralmente não mudam aqui, pois vêm do Auth
         return repository.save(usuarioExistente);
     }
