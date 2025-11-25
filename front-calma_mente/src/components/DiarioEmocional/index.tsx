@@ -3,8 +3,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import TipTapEditor from './TipTapEditor';
-import { BookOpenIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor'
 
 interface JournalEntry {
   id: number;
@@ -12,6 +12,8 @@ interface JournalEntry {
   content: string;
   date: string;
 }
+
+
 
 const DUMMY_ENTRIES: JournalEntry[] = [
   { id: 1, title: "Reflexão sobre a semana", content: "<p>A semana foi produtiva, mas estressante. Preciso focar mais no descanso ativo.</p>", date: "2025-11-18" },
@@ -21,7 +23,7 @@ const DUMMY_ENTRIES: JournalEntry[] = [
 const DiarioEmocional: React.FC = () => {
   const [newContent, setNewContent] = useState('');
   const [newTitle, setNewTitle] = useState('');
-    
+  const [currentHtml, setCurrentHtml] = React.useState('');  
   const [entries, setEntries] = useState<JournalEntry[]>(DUMMY_ENTRIES);
     
   const [viewingEntry, setViewingEntry] = useState<JournalEntry | null>(null);
@@ -74,20 +76,20 @@ const DiarioEmocional: React.FC = () => {
         Diário emocional
       </h1>
 
-      <div className="flex gap-8">
+      <div className="flex gap-16">
         
         {/* 📌 COLUNA ESQUERDA: LISTA DE DIÁRIOS ESCRITOS */}
         <div className="w-1/3 space-y-4">
-          <h2 className="text-2xl font-semibold mb-4 text-indigo-700">Meu Diário</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-violet-700">Meu Diário</h2>
           
           <button 
             onClick={startNewEntry}
-            className="w-full flex items-center justify-center p-3 mb-4 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors"
+            className="w-full flex items-center justify-center p-3 mb-4 bg-violet-600 text-white rounded-lg shadow-md hover:bg-violet-800 transition-colors cursor-pointer"
           >
             <PlusIcon className="w-5 h-5 mr-2" /> Criar Nova Entrada
           </button>
           
-          <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
+          <div className="space-y-3 max-h-[70vh] overflow-y-auto ">
             {entries.map(entry => (
               <div
                 key={entry.id}
@@ -121,17 +123,14 @@ const DiarioEmocional: React.FC = () => {
                 <div className="space-y-4">
                     <h2 className="text-3xl font-bold text-gray-800">{viewingEntry.title}</h2>
                     <p className="text-sm text-gray-600 border-b pb-2">Visualizando entrada de: {viewingEntry.date}</p>
-                    <TipTapEditor
-                        // content={viewingEntry.content}
-                        // onContentChange={() => {}} // Não permite edição, então o handler é vazio
-                        // editable={false}
-                    />
+
+                    <SimpleEditor initialContent={currentHtml} onContentChange={setCurrentHtml}/>
                 </div>
 
             ) : (
                 // MODO DE CRIAÇÃO
                 <div className="space-y-4">
-                    <h2 className="text-2xl font-semibold text-indigo-700">Nova Entrada</h2>
+                    <h2 className="text-2xl font-semibold text-violet-700">Nova Entrada</h2>
                     
                     <input
                         type="text"
@@ -142,11 +141,13 @@ const DiarioEmocional: React.FC = () => {
                         maxLength={100}
                     />
                     
-                    <TipTapEditor
+                    {/* <TipTapEditor
                         // content={newContent}
                         // onContentChange={setNewContent}
                         // editable={true} // Permite edição
-                    />
+                    /> */}
+
+                    <SimpleEditor initialContent={currentHtml} onContentChange={setCurrentHtml}/>
                     
                     <button 
                         onClick={handleSave}

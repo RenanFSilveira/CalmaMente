@@ -185,11 +185,15 @@ const MobileToolbarContent = ({
 )
 
 
+interface SimpleEditorProps {
+  initialContent: string;
+  onContentChange: (html: string) => void;
+}
 
-export function SimpleEditor() {
+export function SimpleEditor({initialContent, onContentChange}: SimpleEditorProps) {
   const isMobile = useIsMobile()
   const { height } = useWindowSize()
-  const [htmlContent, setHtmlContent] = React.useState('<p></p>');
+
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
   >("main")
@@ -198,8 +202,13 @@ export function SimpleEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
+
+    content: initialContent,
+
     onUpdate: ({ editor }) => {
-      setHtmlContent(editor.getHTML());
+      const newHtml = editor.getHTML();
+
+      onContentChange(newHtml);
     },
     editorProps: {
       attributes: {
