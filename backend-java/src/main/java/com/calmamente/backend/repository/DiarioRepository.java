@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface DiarioRepository extends JpaRepository<Diario, UUID> {
-    // Buscar todos os diários de um usuário específico
+public interface DiarioRepository extends JpaRepository<Diario, UUID> {    
     List<Diario> findByUsuarioId(UUID usuarioId);
 }

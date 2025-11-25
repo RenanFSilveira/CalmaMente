@@ -8,13 +8,8 @@ import java.util.UUID;
 
 @Repository
 public interface MedicoRepository extends JpaRepository<Medico, UUID> {
-    
-    // Busca médicos cujo nome do usuário contenha o texto (ignorando maiúsculas/minúsculas)
-    List<Medico> findByUsuario_NomeContainingIgnoreCase(String nome);
-
-    // Busca por especialidade exata (ignorando caixa)
-    List<Medico> findByEspecialidadeContainingIgnoreCase(String especialidade);
-
-    // Busca pelos dois ao mesmo tempo
+        
+    List<Medico> findByUsuario_NomeContainingIgnoreCase(String nome);    
+    List<Medico> findByEspecialidadeContainingIgnoreCase(String especialidade);    
     List<Medico> findByUsuario_NomeContainingIgnoreCaseAndEspecialidadeContainingIgnoreCase(String nome, String especialidade);
 }

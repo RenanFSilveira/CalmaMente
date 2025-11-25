@@ -15,25 +15,25 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
 
-    // Método renomeado: Agora focamos em ATUALIZAR os dados extras
+    
     public Usuario atualizarPerfil(UUID id, Usuario dadosAtualizados) {
         Usuario usuarioExistente = buscarUsuarioComRetry(id);
 
-        // Atualiza apenas os campos permitidos
+        
         if(dadosAtualizados.getNome() != null) usuarioExistente.setNome(dadosAtualizados.getNome());
         if(dadosAtualizados.getTelefone() != null) usuarioExistente.setTelefone(dadosAtualizados.getTelefone());
         if(dadosAtualizados.getDataNascimento() != null) usuarioExistente.setDataNascimento(dadosAtualizados.getDataNascimento());
         if(dadosAtualizados.getFotoPerfil() != null) usuarioExistente.setFotoPerfil(dadosAtualizados.getFotoPerfil());
         if(dadosAtualizados.getGenero() != null) usuarioExistente.setGenero(dadosAtualizados.getGenero());
 
-        // O Tipo e Email geralmente não mudam aqui, pois vêm do Auth
+        
         return repository.save(usuarioExistente);
     }
 
     private Usuario buscarUsuarioComRetry(UUID id) {
         int tentativas = 0;
         int maxTentativas = 5;
-        long tempoEspera = 1000; // 1 segundo
+        long tempoEspera = 1000; 
 
         while (tentativas < maxTentativas) {
             Optional<Usuario> usuario = repository.findById(id);

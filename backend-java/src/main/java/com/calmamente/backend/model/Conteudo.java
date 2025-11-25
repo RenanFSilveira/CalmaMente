@@ -22,13 +22,13 @@ public class Conteudo {
     private TipoConteudo tipo;
 
     @Column(length = 50)
-    private String categoria; // Ex: "Ansiedade", "Sono", "Depressão"
+    private String categoria; 
 
     @Column(columnDefinition = "TEXT")
     private String descricao;
 
     @Column(columnDefinition = "TEXT")
-    private String url; // Link para o vídeo ou texto completo
+    private String url; 
 
     @Column(nullable = false)
     private Boolean ativo = true;

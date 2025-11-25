@@ -33,9 +33,21 @@ public class AgendamentoController {
         return ResponseEntity.ok(service.listarOcupados(medicoId, inicio, fim));
     }
 
-    // 👇 NOVO ENDPOINT ADICIONADO
+    
     @GetMapping("/meus/{usuarioId}")
     public ResponseEntity<List<Agendamento>> listarMinhas(@PathVariable UUID usuarioId) {
         return ResponseEntity.ok(service.listarMinhasConsultas(usuarioId));
+    }
+
+    @DeleteMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Void> excluirPorUsuario(@PathVariable UUID usuarioId) {
+        long removidos = service.excluirAgendamentosPorUsuario(usuarioId);
+        if (removidos > 0) {
+            return ResponseEntity.noContent().build();
+        } else {
+            
+            
+            return ResponseEntity.notFound().build();
+        }
     }
 }

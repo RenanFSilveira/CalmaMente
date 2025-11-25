@@ -13,13 +13,11 @@ public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    // Relacionamento: Esse agendamento pertence a um Paciente
+    
     @ManyToOne
     @JoinColumn(name = "paciente_id", nullable = false)
     private Usuario paciente;
-
-    // Relacionamento: Esse agendamento pertence a um Profissional
+    
     @ManyToOne
     @JoinColumn(name = "profissional_id", nullable = false)
     private Usuario profissional;
@@ -41,8 +39,7 @@ public class Agendamento {
     protected void onCreate() {
         if (this.criadoEm == null) {
             this.criadoEm = LocalDateTime.now();
-        }
-        // Se não vier status, define como pendente por padrão
+        }        
         if (this.status == null) {
             this.status = StatusAgendamento.pendente;
         }

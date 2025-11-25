@@ -23,27 +23,21 @@ public class MedicoService {
 
     @Transactional 
     public Medico cadastrarMedico(CadastroMedicoDTO dados) {
-        // 1. Busca o Usuário com Retry
         Usuario usuario = buscarUsuarioComRetry(dados.getUsuarioId());
 
-        // 2. Atualiza os dados na tabela Usuario
         usuario.setNome(dados.getNome());
         usuario.setTelefone(dados.getTelefone());
         
-        // --- NOVOS CAMPOS SENDO SALVOS ---
         if (dados.getCpf() != null) usuario.setCpf(dados.getCpf());
         if (dados.getGenero() != null) usuario.setGenero(dados.getGenero());
         if (dados.getDataNascimento() != null) usuario.setDataNascimento(dados.getDataNascimento());
-        // ---------------------------------
 
         usuario.setTipo(TipoUsuario.profissional); 
         usuarioRepository.save(usuario);
 
-        // 3. Cria a entrada na tabela Medico
         Medico medico = new Medico();
         medico.setUsuario(usuario);
         
-        // Garante o ID igual (Correção importante)
         medico.setId(usuario.getId()); 
 
         medico.setCrm(dados.getCrm());

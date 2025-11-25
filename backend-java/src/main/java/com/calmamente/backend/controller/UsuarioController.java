@@ -16,13 +16,11 @@ public class UsuarioController {
     @Autowired
     private UsuarioService service;
 
-    // GET /usuarios -> Lista todos
     @GetMapping
     public ResponseEntity<List<Usuario>> listar() {
         return ResponseEntity.ok(service.listarTodos());
     }
 
-    // GET /usuarios/{id} -> Pega um específico
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable UUID id) {
         return service.buscarPorId(id)
@@ -30,7 +28,6 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // PUT /usuarios/{id} -> Atualiza dados do perfil (Cadastro complementar)
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> atualizar(@PathVariable UUID id, @RequestBody Usuario usuario) {
         System.out.println("--- RECEBENDO PUT /usuarios/" + id + " ---");

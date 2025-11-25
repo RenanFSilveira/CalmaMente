@@ -13,8 +13,7 @@ public class Pontuacao {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
-    // Cada usuário tem apenas um registro de pontuação (OneToOne seria ideal, mas ManyToOne funciona bem e é simples)
+    
     @OneToOne
     @JoinColumn(name = "usuario_id", unique = true, nullable = false)
     private Usuario usuario;

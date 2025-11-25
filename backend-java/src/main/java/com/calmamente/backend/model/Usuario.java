@@ -23,8 +23,7 @@ public class Usuario {
 
     @Column(unique = true, length = 14)
     private String cpf;
-
-    // ALTERAÇÃO AQUI: Agora usamos o Enum e mapeamos como String para o banco
+    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoUsuario tipo;

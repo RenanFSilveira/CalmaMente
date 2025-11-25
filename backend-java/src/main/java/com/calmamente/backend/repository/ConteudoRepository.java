@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface ConteudoRepository extends JpaRepository<Conteudo, UUID> {
-    // Para filtrar na tela de biblioteca (ex: trazer só vídeos)
-    List<Conteudo> findByTipo(TipoConteudo tipo);
-    
-    // Para filtrar por categoria (ex: trazer tudo sobre "Sono")
+public interface ConteudoRepository extends JpaRepository<Conteudo, UUID> {    
+    List<Conteudo> findByTipo(TipoConteudo tipo);        
     List<Conteudo> findByCategoria(String categoria);
-
     List<Conteudo> findByTituloContainingIgnoreCase(String titulo);
 }

@@ -2,7 +2,6 @@ package com.calmamente.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-// Importações novas necessárias para o JSON funcionar:
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -26,8 +25,8 @@ public class Diario {
     @Column(nullable = false)
     private TipoDiario tipo;
 
-    // AQUI ESTÁ A MÁGICA:
-    // Essa anotação diz ao Hibernate: "Trate essa String como um JSON ao falar com o banco"
+
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb", nullable = false)
     private String conteudo;

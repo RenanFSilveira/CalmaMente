@@ -22,8 +22,7 @@ public class DiarioController {
         Diario novaEntrada = service.criarEntrada(diario);
         return new ResponseEntity<>(novaEntrada, HttpStatus.CREATED);
     }
-
-    // GET /diario/usuario/{id} -> Lista o diário de alguém
+    
     @GetMapping("/usuario/{id}")
     public ResponseEntity<List<Diario>> listarDoUsuario(@PathVariable UUID id) {
         return ResponseEntity.ok(service.listarPorUsuario(id));

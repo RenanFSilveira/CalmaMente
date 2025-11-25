@@ -32,20 +32,25 @@ public class AgendamentoService {
     public List<Agendamento> listarOcupados(UUID medicoId, LocalDateTime inicio, LocalDateTime fim) {
         return repository.findByProfissionalIdAndDataHoraBetween(medicoId, inicio, fim);
     }
-
-    // 👇 NOVO MÉTODO: Lógica de Decisão (Médico vs Paciente)
-    public List<Agendamento> listarMinhasConsultas(UUID usuarioId) {
-        // 1. Busca o usuário para saber quem ele é
+    
+    public List<Agendamento> listarMinhasConsultas(UUID usuarioId) {        
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        
+        if (usuario.getTipo() == TipoUsuario.profissional) {            
+            return repository.findByProfissionalIdOrderByDataHoraAsc(usuarioId);
+        } else {            
+            return repository.findByPacienteIdOrderByDataHoraAsc(usuarioId);
+        }
+    }
+    public long excluirAgendamentosPorUsuario(UUID usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // 2. Verifica o tipo e faz a busca correta no repositório
         if (usuario.getTipo() == TipoUsuario.profissional) {
-            // Se for médico, busca na coluna 'profissional_id'
-            return repository.findByProfissionalIdOrderByDataHoraAsc(usuarioId);
+            return repository.deleteByProfissionalId(usuarioId);
         } else {
-            // Se for paciente, busca na coluna 'paciente_id'
-            return repository.findByPacienteIdOrderByDataHoraAsc(usuarioId);
+            return repository.deleteByPacienteId(usuarioId);
         }
     }
 }

@@ -14,8 +14,7 @@ public class DiarioService {
     @Autowired
     private DiarioRepository repository;
 
-    public Diario criarEntrada(Diario diario) {
-        // Aqui futuramente entrará a IA para preencher 'humorDetectado'
+    public Diario criarEntrada(Diario diario) {        
         return repository.save(diario);
     }
 

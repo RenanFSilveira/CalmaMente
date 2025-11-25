@@ -16,8 +16,7 @@ public class NotificacaoController {
 
     @Autowired
     private NotificacaoService service;
-
-    // Endpoint para sistemas externos (como n8n) criarem alertas
+    
     @PostMapping
     public ResponseEntity<Notificacao> criar(@RequestBody Notificacao notificacao) {
         return new ResponseEntity<>(service.criarNotificacao(notificacao), HttpStatus.CREATED);

@@ -11,10 +11,10 @@ import java.util.UUID;
 public class Medico {
 
     @Id
-    private UUID id; // O ID não é gerado, é copiado do usuário
+    private UUID id; 
 
     @OneToOne
-    @MapsId // <--- O TRUQUE: Diz que o ID do Medico é o mesmo do Usuario
+    @MapsId 
     @JoinColumn(name = "id")
     private Usuario usuario;
 
